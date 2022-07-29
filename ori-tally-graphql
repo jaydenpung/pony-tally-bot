@@ -1,0 +1,44 @@
+query GovernanceProposals($sort: ProposalSort, $chainId: ChainID!, $pagination: Pagination, $governanceId: AccountID!, $governanceIds: [AccountID!], $proposerIds: [AccountID!]) {
+  proposals(
+    sort: $sort
+    chainId: $chainId
+    pagination: $pagination
+    governanceIds: $governanceIds
+    proposerIds: $proposerIds
+  ) {
+    id
+    description
+    statusChanges {
+      type
+    }
+    voteStats {
+      votes
+      weight
+      support
+      percent
+    }
+    tallyProposal {
+      id
+      createdAt
+      status
+    }
+  }
+  governance(id: $governanceId) {
+    id
+    quorum
+    organization {
+      visual {
+        icon
+      }
+    }
+    stats {
+      proposals {
+        passed
+        failed
+      }
+    }
+    tokens {
+      decimals
+    }
+  }
+}

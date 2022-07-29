@@ -1,0 +1,18 @@
+query GovernanceProposals($sort: ProposalSort, $chainId: ChainID!, $pagination: Pagination, $governanceIds: [AccountID!], $proposerIds: [AccountID!]) {
+  proposals(
+    sort: $sort
+    chainId: $chainId
+    pagination: $pagination
+    governanceIds: $governanceIds
+    proposerIds: $proposerIds
+  ) {
+    id
+    description
+    voteStats {
+      votes
+      weight
+      support
+      percent
+    }
+  }
+}
