@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 
 	"github.com/boltdb/bolt"
 	"github.com/jaydenpung/pony-tally-bot/internal/model"
@@ -15,7 +16,20 @@ import (
 
 func main() {
 
-	godotenv.Load(".env")
+	// load env files
+	ex, err := os.Executable()
+	if err != nil {
+		panic(err)
+	}
+	exPath := filepath.Dir(ex)
+
+	err = godotenv.Load(".env")
+	if err != nil {
+		err = godotenv.Load(exPath + "/.env")
+		if err != nil {
+			log.Fatal("Error loading .env file: ", err)
+		}
+	}
 
 	requestData := model.Payload{
 		Query: "query GovernanceProposals($sort: ProposalSort, $chainId: ChainID!, $pagination: Pagination, $governanceIds: [AccountID!], $proposerIds: [AccountID!]) {   proposals(     sort: $sort     chainId: $chainId     pagination: $pagination     governanceIds: $governanceIds     proposerIds: $proposerIds   ) {     id     description     voteStats {       votes       weight       support       percent     }   } } ",
